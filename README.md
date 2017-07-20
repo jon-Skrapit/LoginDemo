@@ -4,7 +4,7 @@ email login demo
 ### 1.getVerificationCode
 * URL:
 ```
-localhost:3000/getVerificationCode
+localhost:3000/api/getVerificationCode
 ```
 * Method:
 ```
@@ -39,7 +39,7 @@ curl -X POST -H "Content-Type: application/json" \
 ### 2.sendVerificationCode
 * URL:
 ```
-localhost:3000/sendVerificationCode
+localhost:3000/api/sendVerificationCode
 ```
 * Method:
 ```
@@ -74,7 +74,7 @@ curl -X POST -H "Content-Type: application/json" \
 ### 3.login
 * URL:
 ```
-localhost:3000/login
+localhost:3000/api/login
 ```
 * Method:
 ```
