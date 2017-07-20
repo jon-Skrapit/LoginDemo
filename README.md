@@ -25,7 +25,7 @@ email=[string] passwd=[string]
 * Error Response:
 ```
 {
-     status:200,
+     status:400,
      success:false,
      message:"邮箱格式错误"
 }
@@ -60,7 +60,7 @@ email=[string] verificationCode=[string]
 * Error Response:
 ```
 {
-     status:200,
+     status:206,
      success:false,
      message:"验证码已过期"
 }
@@ -95,9 +95,9 @@ email=[string] passwd=[string]
 * Error Response:
 ```
 {
-     status:200,
+     status:401,
      success:false,
-     message:"未验证用户"
+     message:"密码错误"
 }
 ```
 * Sample Call:

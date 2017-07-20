@@ -25,23 +25,23 @@ router.post('/getVerificationCode', function (req, res) {
                     email:email
                 },(err,user)=>{
                     if(err){
-                        res.json({status: err.code, message:"something wrong"})
+                        res.json({status: 500, message:"something wrong"})
                     }
                     if(!user){
-                        res.json({status: res.statusCode,success: false, message:'用户不存在'})
+                        res.json({status: 404,success: false, message:'用户不存在'})
                     }
                     else{
-                        res.json({status: res.statusCode, success: true, message: '发送验证码成功'})
+                        res.json({status: 200, success: true, message: '发送验证码成功'})
                         user.setVerificationCode()
                     }
                 })
             }else{
-                res.json({status: res.statusCode,success: true, message: '成功创建新用户!'})
+                res.json({status: 201,success: true, message: '成功创建新用户!'})
                 newUser.setVerificationCode()
             }
         })
     }else{
-        res.json({status:res.statusCode,status:"error",message:"邮箱格式错误"})
+        res.json({status:400,status:"error",message:"邮箱格式错误"})
     }
 });
 /*
@@ -57,14 +57,14 @@ router.post('/sendVerificationCode',function (req, res){
             throw err
         }
         if(!user){
-            res.json({status:res.statusCode,success: false, message:'用户不存在'});
+            res.json({status:404,success: false, message:'用户不存在'});
         }else{
             let result = user.compareVerificationCode(verificationCode)
             if(result){
-                res.json({status:res.statusCode, success: true, message:'验证码正确'});
+                res.json({status:200, success: true, message:'验证码正确'});
                 user.setActived()
             }else{
-                res.json({status:res.statusCode, success: false, message:'验证码错误或过期'});
+                res.json({status:206, success: false, message:'验证码错误或过期'});
             }
         }
     })
@@ -82,13 +82,13 @@ router.post('/login',function(req,res){
             throw err
         }
         if(!user){
-            res.json({status:res.statusCode, success: false, message:'用户不存在'})
+            res.json({status:404, success: false, message:'用户不存在'})
         }else{
             let result = user.comparePassword(passwd)
             if(result){
-                res.json({status:res.statusCode, success:true,message:"密码正确"})
+                res.json({status:200, success:true,message:"密码正确"})
             }else{
-                res.json({status:res.statusCode, success:false,message:"密码错误"})
+                res.json({status:401, success:false,message:"密码错误"})
             }
         }
     })
