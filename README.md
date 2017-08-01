@@ -32,9 +32,7 @@ email=[string] passwd=[string]
 ```
 * Sample Call:
 ```
-curl -X POST -H "Content-Type: application/json" \
-     -d '{"email":"example@qq.com","passwd":"123"}' \
-     "localhost:3000/api/getVerificationCode"
+curl -X POST -H "Content-Type: application/json" -d '{"email":"example@qq.com","passwd":"123"}' "localhost:3000/api/getVerificationCode"
 ```
 ### 2.sendVerificationCode
 * URL:
@@ -67,9 +65,7 @@ email=[string] verificationCode=[string]
 ```
 * Sample Call:
 ```
-curl -X POST -H "Content-Type: application/json" \
-     -d '{"email":"example@qq.com","verificationCode":"htpb"}' \
-     "localhost:3000/api/sendVerificationCode"
+curl -X POST -H "Content-Type: application/json" -d '{"email":"example@qq.com","verificationCode":"htpb"}' "localhost:3000/api/sendVerificationCode"
 ```
 ### 3.login
 * URL:
@@ -102,7 +98,5 @@ email=[string] passwd=[string]
 ```
 * Sample Call:
 ```
-curl -X POST -H "Content-Type: application/json" \
-     -d '{"email":"example@qq.com","passwd":"123"}' \
-     "localhost:3000/api/login"
+curl -X POST -H "Content-Type: application/json" -d '{"email":"example@qq.com","passwd":"123"}' "localhost:3000/api/login"
 ```
