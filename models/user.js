@@ -13,12 +13,6 @@ const UserSchema = new Schema({
         type: String,
         require: true // 不可为空约束
     },
-    verificationCode: {
-        type: String
-    },
-    expiration: {
-        type: String
-    },
     actived: {
         type: Boolean
     }
@@ -44,43 +38,11 @@ UserSchema.methods.comparePassword = function(passw) {
         return false
     }
 };
-UserSchema.methods.setVerificationCode = function(){
-    var user = this
-    let expiration = moment().add(20,'m').toDate()
-    let verificationCode = tools.randomString(4)
-    user.expiration = expiration
-    user.verificationCode = verificationCode
-    user.update({_id:this._id},{$set:{verificationCode,expiration}},function (err){
-        if(!err){
-            user.save(function(err){})
-        }else{
-            console.log(err)
-        }
-    })
-    tools.sendEmail(email,verificationCode)
-    return verificationCode
-}
-UserSchema.methods.compareVerificationCode = function(code){
-    if(code === this.verificationCode){
-        let expiration = moment(this.expiration)
-        let now = moment()
-        if(expiration.isAfter(now)){
-            return true
-        }else{
-            return false
-        }
-    }else{
-        return false
-    }
-}
 UserSchema.methods.setActived = function(code){
     var user = this
-    user.update({_id:this._id},{$set:{actived:true}},function (err){
-        if(!err){
-            user.save(function(err){})
-        }else{
-            console.log(err)
-        }
+    user.actived = true
+    user.save(function(err){
+        console.log(err)
     })
 }
 UserSchema.methods.getActived = function(){

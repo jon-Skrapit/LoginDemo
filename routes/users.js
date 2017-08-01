@@ -37,7 +37,9 @@ router.post('/getVerificationCode', function (req, res) {
                     else{
                         res.json({status: 200, success: true, msg: '发送验证码成功'})
                         logger.info('发送验证码成功',{email:email,status:200, success:true})
-                        let verificationCode = user.setVerificationCode()
+                        //往邮箱中发送验证码
+                        let verificationCode = tools.randomString(4)
+                        tools.sendEmail(email,verificationCode)
                         redis.set(email,verificationCode)
                         redis.expire(email,expire_time)
                     }
@@ -45,7 +47,9 @@ router.post('/getVerificationCode', function (req, res) {
             }else{
                 res.json({status: 201,success: true, msg: '成功创建新用户'})
                 logger.info('成功创建新用户', {email:email,status:201, success: true})
-                let verificationCode = newUser.setVerificationCode()
+                //往邮箱中发送验证码
+                let verificationCode = tools.randomString(4)
+                tools.sendEmail(email,verificationCode)
                 redis.set(email,verificationCode)
                 redis.expire(email,expire_time)
             }
@@ -56,7 +60,7 @@ router.post('/getVerificationCode', function (req, res) {
     }
 });
 /*
-    curl -X POST -H "Content-Type: application/json"      -d '{"email":"example@qq.com","verificationCode":"Y2nP"}'      "localhost:3000/api/sendVerificationCode"
+    curl -X POST -H "Content-Type: application/json"      -d '{"email":"example@qq.com","verificationCode":"nn2M"}'      "localhost:3000/api/sendVerificationCode"
 */
 router.post('/sendVerificationCode',function (req, res){
     email = req.body.email
@@ -78,19 +82,11 @@ router.post('/sendVerificationCode',function (req, res){
                     logger.error({where:'/sendVerificationCode redis get',error:err})
                 }else{
                     if(!result){
-                        //如果redis中不存在验证码，则查询mongodb
-                        let result = user.compareVerificationCode(verificationCode)
-                        if(result){
-                            res.json({status:200, success: true, msg:'验证码正确'});
-                            logger.info('验证码正确', {email:email, status:200, success: true})
-                            user.setActived()
-                        }else{
-                            res.json({status:206, success: false, msg:'验证码错误或过期'});
-                            logger.info('验证码错误或过期',{email:email, status:206, success: false})
-                        }
+                        res.json({status:206, success: false, msg:'验证码错误或过期'});
+                        logger.info('验证码错误或过期',{email:email, status:206, success: false})
                     }else{
                         //查询redis中的验证码是否正确
-                        if(result === verificationCode){
+                        if(result.toLowerCase() === verificationCode.toLowerCase()){
                             res.json({status:200, success: true, msg:'验证码正确'});
                             logger.info('验证码正确', {email:email, status:200, success: true})
                             user.setActived()
