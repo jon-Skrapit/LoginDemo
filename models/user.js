@@ -82,4 +82,7 @@ UserSchema.methods.setActived = function(code){
         }
     })
 }
+UserSchema.methods.getActived = function(){
+    return this.actived
+}
 module.exports = mongoose.model('users', UserSchema);

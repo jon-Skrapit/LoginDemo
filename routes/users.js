@@ -3,6 +3,7 @@ const User = require('../models/user');
 const config = require('../config');
 const router = express.Router();
 const tools = require('../util/tools/index')
+var logger = require('../util/logs');
 // 注册账户
 /**
  * 
@@ -24,23 +25,28 @@ router.post('/getVerificationCode', function (req, res) {
                     email:email
                 },(err,user)=>{
                     if(err){
-                        res.json({status: 500, message:"something wrong"})
+                        res.json({status: 500, success:false, message:"something wrong"})
+                        logger.info({email:email,status:500, success:false,message:'something wrong'})
                     }
                     if(!user){
                         res.json({status: 404,success: false, message:'用户不存在'})
+                        logger.info({email:email,status:404, success:false, message:'用户不存在'})
                     }
                     else{
                         res.json({status: 200, success: true, message: '发送验证码成功'})
+                        logger.info({email:email,status:200, success:true, message:'发送验证码成功'})
                         user.setVerificationCode()
                     }
                 })
             }else{
                 res.json({status: 201,success: true, message: '成功创建新用户!'})
+                logger.info({email:email,status:201, success: true, message:'成功创建新用户!'})
                 newUser.setVerificationCode()
             }
         })
     }else{
         res.json({status:400,status:"error",message:"邮箱格式错误"})
+        logger.info({email:email, status:400, status:"error", message:"邮箱格式错误"})
     }
 });
 /*
@@ -54,16 +60,20 @@ router.post('/sendVerificationCode',function (req, res){
     },(err,user)=>{
         if(err){
             throw err
+            logger.error({where:'/sendVerificationCode',error:err})
         }
         if(!user){
             res.json({status:404,success: false, message:'用户不存在'});
+            logger.info({email:email, status:404,success: false, message:'用户不存在'})
         }else{
             let result = user.compareVerificationCode(verificationCode)
             if(result){
                 res.json({status:200, success: true, message:'验证码正确'});
+                logger.info({email:email, status:200, success: true, message:'验证码正确'})
                 user.setActived()
             }else{
                 res.json({status:206, success: false, message:'验证码错误或过期'});
+                logger.info({email:email, status:206, success: false, message:'验证码错误或过期'})
             }
         }
     })
@@ -79,15 +89,23 @@ router.post('/login',function(req,res){
     },(err,user)=>{
         if(err){
             throw err
+            logger.error({where:'/login',error:err})
         }
         if(!user){
             res.json({status:404, success: false, message:'用户不存在'})
-        }else{
+            logger.info({email:email,status:404, success: false, message:'用户不存在'})
+        }else if(!user.getActived()){
+            res.json({status:406, success: false, message:'用户未激活'})
+            logger.info({email:email,status:406, success: false, message:'用户未激活'})
+        }
+        else{
             let result = user.comparePassword(passwd)
             if(result){
                 res.json({status:200, success:true,message:"密码正确"})
+                logger.info({email:email,status:200, success:true,message:"密码正确"})
             }else{
                 res.json({status:401, success:false,message:"密码错误"})
+                logger.info({email:email,status:401, success:false,message:"密码错误"})
             }
         }
     })
