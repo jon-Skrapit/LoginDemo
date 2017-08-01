@@ -1,8 +1,19 @@
-module.exports = {
-    'database': 'mongodb://localhost:27017/test' ,
-    'fromEmailAcount' : 'example@163.com',
-    'fromEmailPasswd' : 'xxxx',
-    'fromEmailHost':'smtp.163.com',
-    'fromEmailPort': 456,
-    'listenedPort': 3000
+/**
+启动mongodb服务： mongod --dbpath ~/data/db
+通过brew启动redis：brew services start redis
+ */
+var config = {
+    mongodb:{
+        url:'mongodb://localhost:27017/test'
+    },
+    smtpEmail:{
+        name:'13824380038@163.com',
+        password:'exer1234',
+        host:'smtp.163.com',
+        port:456
+    },
+    express:{
+        port: process.env.PORT || 3000
+    }
 }
+module.exports = config

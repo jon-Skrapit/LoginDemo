@@ -1,9 +1,8 @@
 const express = require('express');
 const User = require('../models/user');
-const jwt = require('jsonwebtoken');
 const config = require('../config');
 const router = express.Router();
-const util = require('../util')
+const tools = require('../util/tools/index')
 // 注册账户
 /**
  * 
@@ -12,7 +11,7 @@ const util = require('../util')
 router.post('/getVerificationCode', function (req, res) {
     email = req.body.email
     passwd = req.body.passwd
-    let result = util.isEmail(email)
+    let result = tools.isEmail(email)
     if(result){
         var newUser = new User({
             email: email,

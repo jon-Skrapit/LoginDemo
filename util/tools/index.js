@@ -1,5 +1,5 @@
 var nodemailer = require('nodemailer')
-var config = require('./config')
+var config = require('../../config')
 function randomString(len) {
 　　len = len || 32;
 　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
@@ -12,16 +12,16 @@ function randomString(len) {
 }
 function sendEmail(email, code){
     var smtpConfig = {
-        host: config.fromEmailHost,
-        port: config.fromEmailPort,
+        host: config.smtpEmail.host,
+        port: config.smtpEmail.port,
         auth: {
-            user: config.fromEmailAcount,
-            pass: config.fromEmailPasswd
+            user: config.smtpEmail.name,
+            pass: config.smtpEmail.password
         }
     }
     var transporter = nodemailer.createTransport(smtpConfig)
     var option = {
-        from: config.fromEmailAcount,
+        from: config.smtpEmail.name,
         to:email,
         subject : '验证码',
         html : 'code:'+code

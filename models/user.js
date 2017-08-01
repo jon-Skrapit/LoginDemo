@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const crypto = require('crypto');
 const moment = require('moment')
-const util = require('../util')
+const tools = require('../util/tools/index')
 const UserSchema = new Schema({
     email: {
         type: String,
@@ -47,7 +47,7 @@ UserSchema.methods.comparePassword = function(passw) {
 UserSchema.methods.setVerificationCode = function(){
     var user = this
     let expiration = moment().add(20,'m').toDate()
-    let verificationCode = util.randomString(4)
+    let verificationCode = tools.randomString(4)
     user.expiration = expiration
     user.verificationCode = verificationCode
     user.update({_id:this._id},{$set:{verificationCode,expiration}},function (err){
@@ -57,7 +57,7 @@ UserSchema.methods.setVerificationCode = function(){
             console.log(err)
         }
     })
-    util.sendEmail(email,verificationCode)
+    tools.sendEmail(email,verificationCode)
 }
 UserSchema.methods.compareVerificationCode = function(code){
     if(code === this.verificationCode){
