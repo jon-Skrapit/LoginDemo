@@ -58,6 +58,7 @@ UserSchema.methods.setVerificationCode = function(){
         }
     })
     tools.sendEmail(email,verificationCode)
+    return verificationCode
 }
 UserSchema.methods.compareVerificationCode = function(code){
     if(code === this.verificationCode){

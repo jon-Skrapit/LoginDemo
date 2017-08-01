@@ -10,8 +10,8 @@ var config = {
         url:'mongodb://localhost:27017/test'
     },
     smtpEmail:{
-        name:'13824380038@163.com',
-        password:'exer1234',
+        name:'example@163.com',
+        password:'xxxx',
         host:'smtp.163.com',
         port:456
     },
@@ -22,6 +22,6 @@ var config = {
         host: process.env.REDIS_PORT_6379_TCP_ADDR || '127.0.0.1',
         port: process.env.REDIS_PORT_6379_TCP_PORT || 6379,
         password: process.env.REDIS_PASSWORD || ''
-  }
+    }
 }
 module.exports = config
