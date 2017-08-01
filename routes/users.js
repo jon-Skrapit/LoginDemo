@@ -89,6 +89,7 @@ router.post('/sendVerificationCode',function (req, res){
                         if(result.toLowerCase() === verificationCode.toLowerCase()){
                             res.json({status:200, success: true, msg:'验证码正确'});
                             logger.info('验证码正确', {email:email, status:200, success: true})
+                            redis.del(email)
                             user.setActived()
                         }else{
                             res.json({status:206, success: false, msg:'验证码错误或过期'});
